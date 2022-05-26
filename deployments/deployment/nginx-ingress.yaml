@@ -44,6 +44,7 @@ spec:
          #  cpu: "1"
          #  memory: "1Gi"
         securityContext:
+          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: true
           runAsUser: 101 #nginx
           runAsNonRoot: true
@@ -69,3 +70,31 @@ spec:
          #- -external-service=nginx-ingress
          #- -enable-prometheus-metrics
          #- -global-configuration=$(POD_NAMESPACE)/nginx-configuration
+        volumeMounts:
+          - name: etc
+            mountPath: /etc/nginx
+          - name: secrets
+            mountPath: /etc/nginx/secrets
+          - name: confd
+            mountPath: /etc/nginx/conf.d
+          - name: cache
+            mountPath: /var/cache/nginx
+          - name: lib
+            mountPath: /var/lib/nginx
+          - name: log
+            mountPath: /var/log/nginx
+      securityContext:
+        fsGroup: 101
+      volumes:
+        - name: etc
+          emptyDir: {}
+        - name: secrets
+          emptyDir: {}
+        - name: confd
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+        - name: lib
+          emptyDir: {}
+        - name: log
+          emptyDir: {}
