@@ -13,13 +13,13 @@ error_log  stderr {{.ErrorLogLevel}};
 pid        /var/lib/nginx/nginx.pid;
 
 {{- if .OpenTracingLoadModule}}
-load_module modules/ngx_http_opentracing_module.so;
+load_module /usr/lib/nginx/modules/ngx_http_opentracing_module.so;
 {{- end}}
 {{- if .AppProtectLoadModule}}
-load_module modules/ngx_http_app_protect_module.so;
+load_module /usr/lib/nginx/modules/ngx_http_app_protect_module.so;
 {{- end}}
 {{- if .AppProtectDosLoadModule}}
-load_module modules/ngx_http_app_protect_dos_module.so;
+load_module /usr/lib/nginx/modules/ngx_http_app_protect_dos_module.so;
 {{- end}}
 {{- if .MainSnippets}}
 {{range $value := .MainSnippets}}
@@ -27,7 +27,7 @@ load_module modules/ngx_http_app_protect_dos_module.so;
 {{- end}}
 
 {{if .OIDC}}
-load_module modules/ngx_http_js_module.so;
+load_module /usr/lib/nginx/modules/ngx_http_js_module.so;
 {{- end}}
 
 events {
@@ -35,7 +35,7 @@ events {
 }
 
 http {
-    include       /etc/nginx/mime.types;
+    include       /etc/nginx-static/mime.types;
     default_type  application/octet-stream;
 
     {{- if .HTTPSnippets}}
@@ -138,7 +138,7 @@ http {
     {{end}}
 
     {{if .OIDC}}
-    include oidc/oidc_common.conf;
+    include /etc/nginx-static/oidc/oidc_common.conf;
     {{- end}}
 
     server {

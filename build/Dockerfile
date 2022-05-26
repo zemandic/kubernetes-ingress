@@ -195,7 +195,10 @@ ARG TARGETPLATFORM
 ARG NAP_MODULES=none
 
 # copy oidc files on plus build
-RUN --mount=target=/tmp [ -n "${BUILD_OS##*plus*}" ] && exit 0; mkdir -p etc/nginx/oidc/ && cp -a /tmp/internal/configs/oidc/* /etc/nginx/oidc/
+RUN --mount=target=/tmp [ -n "${BUILD_OS##*plus*}" ] && exit 0; mkdir -p etc/nginx-static/oidc/ && cp -a /tmp/internal/configs/oidc/* /etc/nginx-static/oidc/
+
+# Move mime.types file to nginx-static dir
+RUN mv /etc/nginx/mime.types /etc/nginx-static/mime.types
 
 # run only on nap waf build
 RUN --mount=target=/tmp [ -n "${NAP_MODULES##*waf*}" ] && exit 0; mkdir -p /etc/nginx/waf/nac-policies /etc/nginx/waf/nac-logconfs /etc/nginx/waf/nac-usersigs /var/log/app_protect /opt/app_protect \

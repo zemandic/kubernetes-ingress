@@ -19,7 +19,7 @@ spec:
     spec:
       serviceAccountName: nginx-ingress
       containers:
-      - image: nginx-plus-ingress:2.2.0
+      - image: nginx/nginx-ingress:2.2.0-SNAPSHOT-5355e60
         imagePullPolicy: IfNotPresent
         name: nginx-plus-ingress
         ports:
@@ -44,6 +44,7 @@ spec:
          #  cpu: "1"
          #  memory: "1Gi"
         securityContext:
+          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: true
           runAsUser: 101 #nginx
           runAsNonRoot: true
@@ -65,6 +66,7 @@ spec:
           - -nginx-plus
           - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
           - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
+          - -enable-oidc
          #- -enable-cert-manager
          #- -enable-app-protect
          #- -enable-app-protect-dos
@@ -73,3 +75,31 @@ spec:
          #- -external-service=nginx-ingress
          #- -enable-prometheus-metrics
          #- -global-configuration=$(POD_NAMESPACE)/nginx-configuration
+        volumeMounts:
+          - name: etc
+            mountPath: /etc/nginx
+          - name: secrets
+            mountPath: /etc/nginx/secrets
+          - name: confd
+            mountPath: /etc/nginx/conf.d
+          - name: cache
+            mountPath: /var/cache/nginx
+          - name: lib
+            mountPath: /var/lib/nginx
+          - name: log
+            mountPath: /var/log/nginx
+      securityContext:
+        fsGroup: 101
+      volumes:
+        - name: etc
+          emptyDir: {}
+        - name: secrets
+          emptyDir: {}
+        - name: confd
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+        - name: lib
+          emptyDir: {}
+        - name: log
+          emptyDir: {}
