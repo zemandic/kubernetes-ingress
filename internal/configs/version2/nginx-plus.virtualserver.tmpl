@@ -68,7 +68,7 @@ server {
     set $resource_namespace "{{$s.VSNamespace}}";
 
     {{ with $oidc := $s.OIDC }}
-    include oidc/oidc.conf;
+    include /etc/nginx-static/oidc/oidc.conf;
 
     set $oidc_pkce_enable 0;
     set $oidc_logout_redirect "/_logout";
