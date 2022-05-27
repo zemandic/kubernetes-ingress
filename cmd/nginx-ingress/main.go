@@ -598,6 +598,19 @@ func main() {
 		EnableCertManager:              *enableCertManager,
 	}
 
+	modulesList := []string{
+		"ngx_http_js_module-debug.so",
+		"ngx_http_opentracing_module-debug.so",
+		"ngx_stream_js_module-debug.so",
+		"ngx_http_js_module.so",
+		"ngx_http_opentracing_module.so",
+		"ngx_stream_js_module.so",
+	}
+
+	createSymLinksForModules("/usr/lib/nginx/modules/",
+		"/etc/nginx/modules/",
+		modulesList)
+
 	ngxConfig := configs.GenerateNginxMainConfig(staticCfgParams, cfgParams)
 	content, err := templateExecutor.ExecuteMainConfigTemplate(ngxConfig)
 	if err != nil {
@@ -739,6 +752,15 @@ func main() {
 	for {
 		glog.Info("Waiting for the controller to exit...")
 		time.Sleep(30 * time.Second)
+	}
+}
+
+func createSymLinksForModules(modulesPath, nginxModulesPath string, modulesList []string) {
+	for _, module := range modulesList {
+		err := os.Symlink(modulesPath+module, nginxModulesPath+module)
+		if err != nil {
+			glog.Fatalf("Could not create symlink: %v", err)
+		}
 	}
 }
 

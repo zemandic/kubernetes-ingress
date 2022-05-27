@@ -80,6 +80,8 @@ spec:
             mountPath: /etc/nginx
           - name: secrets
             mountPath: /etc/nginx/secrets
+          - name: modules
+            mountPath: /etc/nginx/modules
           - name: confd
             mountPath: /etc/nginx/conf.d
           - name: cache
@@ -94,6 +96,8 @@ spec:
         - name: etc
           emptyDir: {}
         - name: secrets
+          emptyDir: {}
+        - name: modules
           emptyDir: {}
         - name: confd
           emptyDir: {}
