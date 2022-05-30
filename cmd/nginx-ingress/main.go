@@ -598,18 +598,8 @@ func main() {
 		EnableCertManager:              *enableCertManager,
 	}
 
-	modulesList := []string{
-		"ngx_http_js_module-debug.so",
-		"ngx_http_opentracing_module-debug.so",
-		"ngx_stream_js_module-debug.so",
-		"ngx_http_js_module.so",
-		"ngx_http_opentracing_module.so",
-		"ngx_stream_js_module.so",
-	}
-
 	createSymLinksForModules("/usr/lib/nginx/modules/",
-		"/etc/nginx/modules/",
-		modulesList)
+		"/etc/nginx/modules/")
 
 	ngxConfig := configs.GenerateNginxMainConfig(staticCfgParams, cfgParams)
 	content, err := templateExecutor.ExecuteMainConfigTemplate(ngxConfig)
@@ -755,9 +745,23 @@ func main() {
 	}
 }
 
-func createSymLinksForModules(modulesPath, nginxModulesPath string, modulesList []string) {
-	for _, module := range modulesList {
-		err := os.Symlink(modulesPath+module, nginxModulesPath+module)
+func createSymLinksForModules(modulesPath, nginxModulesPath string) {
+	//for _, module := range modulesList {
+	//	err := os.Symlink(modulesPath+module, nginxModulesPath+module)
+	//	symlinkExistsErr := errors.Is(err, os.ErrExist)
+	//	if symlinkExistsErr {
+	//		continue
+	//	}
+	//	if err != nil && !symlinkExistsErr {
+	//		if symlinkExistsErr {
+	//			continue
+	//		} else {
+	//			glog.Fatalf("Could not create symlink: %v", err)
+	//		}
+	//	}
+	//}
+	if _, err := os.Stat(nginxModulesPath); os.IsNotExist(err) {
+		err := os.Symlink(modulesPath, nginxModulesPath)
 		if err != nil {
 			glog.Fatalf("Could not create symlink: %v", err)
 		}
