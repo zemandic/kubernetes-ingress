@@ -1,6 +1,6 @@
 ---
 title: Remote files
 build:
-  list: false
-  render: false
+  list: never
+  render: never
 ---
