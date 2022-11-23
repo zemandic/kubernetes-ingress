@@ -16,6 +16,15 @@ canonifyURLs = true
 [[module.imports]]
   path="gitlab.com/f5/nginx/controller/poc/f5-hugo"
 
+[[module.imports]]
+  path = "github.com/nginxinc/kubernetes-ingress"
+  noVendor = true
+  ignoreConfig = true
+
+  [[module.imports.mounts]]
+    source = "deployments/helm-chart/"
+    target = "content/remote/helm-chart/"
+
 [markup]
   [markup.highlight]
     codeFences = true
