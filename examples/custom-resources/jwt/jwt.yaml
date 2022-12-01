@@ -7,3 +7,4 @@ spec:
     realm: MyProductAPI
     secret: jwk-secret
     token: $http_token
+    jwksURI: http://keycloak.default.svc.cluster.local:8080/auth/realms/master/protocol/openid-connect/certs

@@ -164,6 +164,7 @@ server {
     {{ with $s.JWTAuth }}
     auth_jwt "{{ .Realm }}"{{ if .Token }} token={{ .Token }}{{ end }};
     auth_jwt_key_file {{ .Secret }};
+    auth_jwt_key_request {{ .JwksURI }};
     {{ end }}
 
     {{ with $s.BasicAuth }}

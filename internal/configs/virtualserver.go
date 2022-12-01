@@ -236,12 +236,18 @@ type virtualServerConfigurator struct {
 	warnings             Warnings
 	spiffeCerts          bool
 	oidcPolCfg           *oidcPolicyCfg
+	jwtPolCfg            *jwtPolicyCfg
 	isIPV6Disabled       bool
 }
 
 type oidcPolicyCfg struct {
 	oidc *version2.OIDC
 	key  string
+}
+
+type jwtPolicyCfg struct {
+	jwtAuth *version2.JWTAuth
+	key     string // Not sure what for
 }
 
 func (vsc *virtualServerConfigurator) addWarningf(obj runtime.Object, msgFmt string, args ...interface{}) {
@@ -835,9 +841,10 @@ func (p *policiesCfg) addJWTAuthConfig(
 	}
 
 	p.JWTAuth = &version2.JWTAuth{
-		Secret: secretRef.Path,
-		Realm:  jwtAuth.Realm,
-		Token:  jwtAuth.Token,
+		Secret:  secretRef.Path,
+		Realm:   jwtAuth.Realm,
+		Token:   jwtAuth.Token,
+		JwksURI: jwtAuth.JwksURI,
 	}
 	return res
 }

@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: quay.io/keycloak/keycloak:15.0.2
+        image: jboss/keycloak:multiarch
         env:
         - name: KEYCLOAK_USER
           value: "admin"
@@ -48,3 +48,4 @@ spec:
           httpGet:
             path: /auth/realms/master
             port: 8080
+          initialDelaySeconds: 120
