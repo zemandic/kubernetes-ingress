@@ -51,7 +51,7 @@ $ kubectl logs <nginx-ingress-pod> -n nginx-ingress
 
 If you need to do additional troubleshooting for NGINX Ingress controller, there are few additional settings you can configure, to add more verbose logging.
 
-There are two settings that need to be set to enable more debug/verbose logging for NGINX Ingress controller.   
+There are two settings that need to be set to enable more debug/verbose logging for NGINX Ingress controller.
 
 1. command line arguments
 2. configmap settings
@@ -62,7 +62,7 @@ This document will cover how to enable both.
 You can use NGINX Ingress controller command line arguments. This is a great way to increase debug log levels for both Ingress as well as NGINX.
 When using `manifest` for deployment:
 
-1.) Use the command line argument, `- -nginx-debug` in your deployment/daemonset    
+1.) Use the command line argument, `- -nginx-debug` in your deployment/daemonset
 2.) If you want to increase the Ingress `Controller` process lets, set the command line argument to `v=3`, which collects more information on Ingress
 
  ```yaml
@@ -91,9 +91,9 @@ data:
   error-log-level: "debug"
  ```
 
-## When using `Helm`   
+## When using `Helm`
 
-If you are using `helm`, you can look for these two settings:  
+If you are using `helm`, you can look for these two settings:
 ```
 controller.nginxDebug = true or false
 controller.loglevel = 1 to 3 value
@@ -107,9 +107,9 @@ For example, if using a `values.yaml` file:
   ## The log level of the Ingress Controller.
   logLevel: 3
 ```
-Here is a more complete `values.yaml` file when using `helm`:   
+Here is a more complete `values.yaml` file when using `helm`:
 
-```yaml 
+```yaml
 controller:
   kind: Deployment
   nginxDebug: true
@@ -140,7 +140,7 @@ controller:
 By enabling the `nginx-debug` CLI argument and changing the `error-log-level` to `debug`, you can capture more output and debug any issues that are going on.
 **NOTE**: It is recommended to only use the `nginx-debug` CLI and the `error-log-level` enabled when debugging purposes.
 
-## Example of debugging output for NGINX Ingress controller pod.  
+## Example of debugging output for NGINX Ingress controller pod.
 
 Once you have debugging enabled, you can see the logs have additional entries when reviewing logs:
 
@@ -188,5 +188,3 @@ Once you have completed your debugging process, you can change the values back t
 ### Checking the Live Activity Monitoring Dashboard
 
 The live activity monitoring dashboard shows the real-time information about NGINX Plus and the applications it is load balancing, which is helpful for troubleshooting. To access the dashboard, follow the steps from [here](/nginx-ingress-controller/logging-and-monitoring/status-page).
-
-
