@@ -47,102 +47,146 @@ To check the Ingress Controller logs -- both of the Ingress Controller software 
 $ kubectl logs <nginx-ingress-pod> -n nginx-ingress
 ```
 
-Controlling the verbosity and format:
-* To control the verbosity of the Ingress Controller software logs (from 1 to 4), use the `-v` [command-line argument](/nginx-ingress-controller/configuration/global-configuration/command-line-arguments). For example, with `-v=3` you will get more information and the content of any new or updated configuration file will be printed in the logs.
-* To control the verbosity and the format of the NGINX logs, configure the corresponding [ConfigMap keys](/nginx-ingress-controller/configuration/global-configuration/configmap-resource).
+### Enabling debuging for NGINX Ingress Controller
 
-### Checking the Events of an Ingress Resource
+If you need to do additional troubleshooting for NGINX Ingress controller, there are few additional settings you can configure, to add more verbose logging.
 
-After you create or update an Ingress resource, you can immediately check if the NGINX configuration for that Ingress resource was successfully applied by NGINX:
-```
-$ kubectl describe ing cafe-ingress
-Name:             cafe-ingress
-Namespace:        default
-. . .
-Events:
-  Type    Reason          Age   From                      Message
-  ----    ------          ----  ----                      -------
-  Normal  AddedOrUpdated  12s   nginx-ingress-controller  Configuration for default/cafe-ingress was added or updated
-```
-Note that in the events section, we have a `Normal` event with the `AddedOrUpdated` reason, which informs us that the configuration was successfully applied.
+There are two settings that need to be set to enable more debug/verbose logging for NGINX Ingress controller.   
 
-### Checking the Events of a VirtualServer and VirtualServerRoute Resources
+1. command line arguments
+2. configmap settings
 
-After you create or update a VirtualServer resource, you can immediately check if the NGINX configuration for that  resource was successfully applied by NGINX:
-```
-$ kubectl describe vs cafe
-. . .
-Events:
-  Type    Reason          Age   From                      Message
-  ----    ------          ----  ----                      -------
-  Normal  AddedOrUpdated  16s   nginx-ingress-controller  Configuration for default/cafe was added or updated
-```
-Note that in the events section, we have a `Normal` event with the `AddedOrUpdated` reason, which informs us that the configuration was successfully applied.
+This document will cover how to enable both.
 
-Checking the events of a VirtualServerRoute is similar:
-```
-$ kubectl describe vsr coffee
-. . .
-Events:
-  Type     Reason                 Age   From                      Message
-  ----     ------                 ----  ----                      -------
-  Normal   AddedOrUpdated         1m    nginx-ingress-controller  Configuration for default/coffee was added or updated
+
+You can use NGINX Ingress controller command line arguments. This is a great way to increase debug log levels for both Ingress as well as NGINX.
+When using `manifest` for deployment:
+
+1.) Use the command line argument, `- -nginx-debug` in your deployment/daemonset    
+2.) If you want to increase the Ingress `Controller` process lets, set the command line argument to `v=3`, which collects more information on Ingress
+
+ ```yaml
+ -v=3
+ ```
+
+Here is a small snippet of setting these a command line arguments in the `ARGS` section of a deployment:
+
+```yaml
+args:
+  - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
+  - -enable-cert-manager
+  - -nginx-debug
+  - -v=3
 ```
 
-### Checking the Events of a Policy Resource
+You can configure `error-log-level` in the NGINX Ingress controller `configMap`:
 
-After you create or update a Policy resource, you can use `kubectl describe` to check whether or not the Ingress Controller accepted the Policy:
+```yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-config
+  namespace: nginx-ingress
+data:
+  error-log-level: "debug"
+ ```
+
+## When using `Helm`   
+
+If you are using `helm`, you can look for these two settings:  
 ```
-$ kubectl describe pol webapp-policy
-. . .
-Events:
-  Type    Reason          Age   From                      Message
-  ----    ------          ----  ----                      -------
-  Normal  AddedOrUpdated  11s   nginx-ingress-controller  Policy default/webapp-policy was added or updated
+controller.nginxDebug = true or false
+controller.loglevel = 1 to 3 value
 ```
-Note that in the events section, we have a `Normal` event with the `AddedOrUpdated` reason, which informs us that the policy was successfully accepted.
+For example, if using a `values.yaml` file:
 
-However, the fact that a policy was accepted doesn't guarantee that the NGINX configuration was successfully applied. To confirm that, check the events of the VirtualServer and VirtualServerRoute resources that reference that policy.
+```yaml
+  ## Enables debugging for NGINX. Uses the nginx-debug binary. Requires error-log-level: debug in the ConfigMap via `controller.config.entries`.
+  nginxDebug: true
 
-### Checking the Events of the ConfigMap Resource
-
-After you update the [ConfigMap](/nginx-ingress-controller/configuration/global-configuration/configmap-resource) resource, you can immediately check if the configuration was successfully applied by NGINX:
+  ## The log level of the Ingress Controller.
+  logLevel: 3
 ```
-$ kubectl describe configmap nginx-config -n nginx-ingress
-Name:         nginx-config
-Namespace:    nginx-ingress
-Labels:       <none>
-. . .
-Events:
-  Type    Reason   Age                From                      Message
-  ----    ------   ----               ----                      -------
-  Normal  Updated  11s (x2 over 26m)  nginx-ingress-controller  Configuration from nginx-ingress/nginx-config was updated
-```
-Note that in the events section, we have a `Normal` event with the `Updated` reason, which informs us that the configuration was successfully applied.
+Here is a more complete `values.yaml` file when using `helm`:   
 
-### Checking the Generated Config
-
-For each Ingress/VirtualServer resource, the Ingress Controller generates a corresponding NGINX configuration file in the `/etc/nginx/conf.d` folder. Additionally, the Ingress Controller generates the main configuration file `/etc/nginx/nginx.conf`, which includes all the configurations files from `/etc/nginx/conf.d`. The config of a VirtualServerRoute resource is located in the configuration file of the VirtualServer that references the resource.
-
-You can view the content of the main configuration file by running:
+```yaml 
+controller:
+  kind: Deployment
+  nginxDebug: true
+  logLevel: 3
+  annotations:
+    nginx: ingress-prod
+  pod:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9113"
+      prometheus.io/scheme: http
+    extraLabels:
+      env: prod-weset
+  nginxplus: plus
+  image:
+    repository: nginx/nginx-ingress
+    tag: 2.4.1
+  # NGINX Configmap
+  config:
+    entries:
+      error-log-level: "debug"
+      proxy_connet_timeout: "5s"
+      http-snippets: |
+        underscores_in_headers on;
+  ingressClass: nginx
 ```
-$ kubectl exec <nginx-ingress-pod> -n nginx-ingress -- cat /etc/nginx/nginx.conf
+
+By enabling the `nginx-debug` CLI argument and changing the `error-log-level` to `debug`, you can capture more output and debug any issues that are going on.
+**NOTE**: It is recommended to only use the `nginx-debug` CLI and the `error-log-level` enabled when debugging purposes.
+
+## Example of debugging output for NGINX Ingress controller pod.  
+
+Once you have debugging enabled, you can see the logs have additional entries when reviewing logs:
+
+```nginx
+I1026 15:39:03.269092       1 manager.go:301] Reloading nginx with configVersion: 1
+I1026 15:39:03.269115       1 utils.go:17] executing /usr/sbin/nginx-debug -s reload -e stderr
+2022/10/26 15:39:03 [notice] 19#19: signal 1 (SIGHUP) received from 42, reconfiguring
+2022/10/26 15:39:03 [debug] 19#19: wake up, sigio 0
+2022/10/26 15:39:03 [notice] 19#19: reconfiguring
+2022/10/26 15:39:03 [debug] 19#19: posix_memalign: 000056362AF0A420:16384 @16
+2022/10/26 15:39:03 [debug] 19#19: add cleanup: 000056362AF0C318
+2022/10/26 15:39:03 [debug] 19#19: posix_memalign: 000056362AF48230:16384 @16
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF00DE0:4096
+2022/10/26 15:39:03 [debug] 19#19: read: 46, 000056362AF00DE0, 3090, 0
+2022/10/26 15:39:03 [debug] 19#19: posix_memalign: 000056362AF58670:16384 @16
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF12440:4280
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF13500:4280
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF145C0:4280
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF5C680:4280
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF5D740:4280
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF5E800:4280
+2022/10/26 15:39:03 [debug] 19#19: posix_memalign: 000056362AF5F8C0:16384 @16
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF41500:4096
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF638D0:8192
+2022/10/26 15:39:03 [debug] 19#19: include /etc/nginx/mime.types
+2022/10/26 15:39:03 [debug] 19#19: include /etc/nginx/mime.types
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF658E0:4096
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF668F0:5349
+2022/10/26 15:39:03 [debug] 19#19: read: 47, 000056362AF658E0, 4096, 0
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF67DE0:4096
+2022/10/26 15:39:03 [debug] 19#19: read: 47, 000056362AF658E1, 1253, 4096
+2022/10/26 15:39:03 [debug] 19#19: posix_memalign: 000056362AF68DF0:16384 @16
+2022/10/26 15:39:03 [debug] 19#19: posix_memalign: 000056362AF6CE00:16384 @16
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AF70E10:524288
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362AFF0E20:524288
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362B070E30:524288
+2022/10/26 15:39:03 [debug] 19#19: malloc: 000056362B0F0E40:400280
 ```
 
-Similarly, you can view the content of any generated configuration file in the `/etc/nginx/conf.d` folder.
+Once you have completed your debugging process, you can change the values back to the original values.
 
-You can also print all NGINX configuration files together:
-```
-$ kubectl exec <nginx-ingress-pod> -n nginx-ingress -- nginx -T
-```
-However, this command will fail if any of the configuration files is not valid.
+
+
 
 ### Checking the Live Activity Monitoring Dashboard
 
 The live activity monitoring dashboard shows the real-time information about NGINX Plus and the applications it is load balancing, which is helpful for troubleshooting. To access the dashboard, follow the steps from [here](/nginx-ingress-controller/logging-and-monitoring/status-page).
 
-### Running NGINX in the Debug Mode
 
-Running NGINX in the [debug mode](https://docs.nginx.com/nginx/admin-guide/monitoring/debugging/) allows us to enable its debug logs, which can help to troubleshoot problems in NGINX. Note that it is highly unlikely that a problem you encounter with the Ingress Controller is caused by a bug in the NGINX code, but it is rather caused by NGINX misconfiguration. Thus, this method is rarely needed.
-
-To enable the debug mode, set the `error-log-level` to `debug` in the [ConfigMap](/nginx-ingress-controller/configuration/global-configuration/configmap-resource) and use the `-nginx-debug` [command-line argument](/nginx-ingress-controller/configuration/global-configuration/command-line-arguments) when running the Ingress Controller.
