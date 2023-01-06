@@ -182,7 +182,23 @@ I1026 15:39:03.269115       1 utils.go:17] executing /usr/sbin/nginx-debug -s re
 
 Once you have completed your debugging process, you can change the values back to the original values.
 
+Checking the Generated Config
+For each Ingress/VirtualServer resource, the Ingress Controller generates a corresponding NGINX configuration file in the /etc/nginx/conf.d folder. Additionally, the Ingress Controller generates the main configuration file /etc/nginx/nginx.conf, which includes all the configurations files from /etc/nginx/conf.d. The config of a VirtualServerRoute resource is located in the configuration file of the VirtualServer that references the resource.
 
+You can view the content of the main configuration file by running:
+```
+$ kubectl exec <nginx-ingress-pod> -n nginx-ingress -- cat /etc/nginx/nginx.conf
+```
+
+Similarly, you can view the content of any generated configuration file in the /etc/nginx/conf.d folder.
+
+You can also print all NGINX configuration files together:
+
+```
+$ kubectl exec <nginx-ingress-pod> -n nginx-ingress -- nginx -T
+```
+
+However, this command will fail if any of the configuration files is not valid.
 
 
 ### Checking the Live Activity Monitoring Dashboard
