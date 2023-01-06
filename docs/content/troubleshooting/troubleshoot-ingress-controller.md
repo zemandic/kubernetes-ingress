@@ -62,8 +62,8 @@ This document will cover how to enable both.
 You can use the Ingress Controller command line arguments. This is a great way to increase debug log levels for both the Ingress Controller as well as NGINX.
 When using `manifest` for deployment:
 
-1.) Use the command line argument, `- -nginx-debug` in your deployment/daemonset
-2.) If you want to increase the Ingress `Controller` process lets, set the command line argument to `v=3`, which collects more information on Ingress
+1.) Use the command line argument `- -nginx-debug` in your deployment or daemonset
+2.) If you want to increase the verbosity of the Ingress Controller process, set the command line argument to `v=3`
 
  ```yaml
  -v=3
