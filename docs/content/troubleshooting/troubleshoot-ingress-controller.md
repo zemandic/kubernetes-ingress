@@ -49,9 +49,9 @@ $ kubectl logs <nginx-ingress-pod> -n nginx-ingress
 
 ### Enabling debuging for NGINX Ingress Controller
 
-If you need to do additional troubleshooting for NGINX Ingress controller, there are few additional settings you can configure, to add more verbose logging.
+If you need to do additional troubleshooting for the Ingress Controller, there are a few additional settings you can configure, to add more verbose logging.
 
-There are two settings that need to be set to enable more debug/verbose logging for NGINX Ingress controller.
+There are two settings that need to be set to enable more debug/verbose logging for the Ingress Controller.
 
 1. command line arguments
 2. configmap settings
