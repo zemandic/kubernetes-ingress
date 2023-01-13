@@ -12,9 +12,6 @@ changelog:
     - title: 🐛 Bug Fixes
       labels:
         - bug
-    - title: 📝 Documentation
-      labels:
-        - documentation
     - title: 📦 Helm Chart
       labels:
         - helm_chart
@@ -27,6 +24,9 @@ changelog:
     - title: ⬆️ Dependencies
       labels:
         - dependencies
+    - title: 📝 Documentation
+      labels:
+        - documentation
     - title: Other Changes
       labels:
         - "*"
