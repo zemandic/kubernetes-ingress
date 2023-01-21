@@ -140,7 +140,7 @@ jobs:
           file: build/Dockerfile
           context: '.'
           cache-from: type=gha,scope=${{ matrix.image }}
-          cache-to: type=gha,scope=${{ matrix.image }},mode=max
+          cache-to: type=gha,scope=${{ matrix.image }}
           target: goreleaser
           tags: ${{ matrix.type }}:${{ github.sha }}
           pull: true
