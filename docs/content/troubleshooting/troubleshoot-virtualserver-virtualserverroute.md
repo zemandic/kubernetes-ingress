@@ -1,7 +1,7 @@
 Checking the Events of a VirtualServer and VirtualServerRoute Resources
 After you create or update a VirtualServer resource, you can immediately check if the NGINX configuration for that resource was successfully applied by NGINX:
 
-$ kubectl describe vs cafe
+`kubectl describe vs cafe`
 . . .
 Events:
   Type    Reason          Age   From                      Message
