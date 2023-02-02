@@ -69,7 +69,7 @@ When using `manifest` for deployment:
  -v=3
  ```
 
-Here is a small snippet of setting these a command line arguments in the `ARGS` section of a deployment:
+Here is a small snippet of setting these command line arguments in the `args` section of a deployment:
 
 ```yaml
 args:
