@@ -11,7 +11,7 @@ Note that in the events section, we have a Normal event with the AddedOrUpdated 
 
 Checking the events of a VirtualServerRoute is similar:
 
-$ kubectl describe vsr coffee
+`kubectl describe vsr coffee`
 . . .
 Events:
   Type     Reason                 Age   From                      Message
