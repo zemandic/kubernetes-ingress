@@ -1,5 +1,5 @@
 Checking the Events of a Policy Resource
-After you create or update a Policy resource, you can use kubectl describe to check whether or not the Ingress Controller accepted the Policy:
+After you create or update a Policy resource, you can use `kubectl describe` to check whether or not the Ingress Controller accepted the Policy:
 
 `kubectl describe pol webapp-policy`
 . . .
