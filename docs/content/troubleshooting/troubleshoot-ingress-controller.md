@@ -44,7 +44,7 @@ Note that the commands in the next sections make the following assumptions:
 
 To check the Ingress Controller logs -- both of the Ingress Controller software and the NGINX access and error logs -- run:
 ```
-$ kubectl logs <nginx-ingress-pod> -n nginx-ingress
+`kubectl logs <nginx-ingress-pod> -n nginx-ingress`
 ```
 
 ### Enabling debuging for NGINX Ingress Controller
