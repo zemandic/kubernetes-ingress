@@ -14,7 +14,7 @@ However, the fact that a policy was accepted doesn’t guarantee that the NGINX 
 Checking the Events of the ConfigMap Resource
 After you update the ConfigMap resource, you can immediately check if the configuration was successfully applied by NGINX:
 
-$ kubectl describe configmap nginx-config -n nginx-ingress
+`kubectl describe configmap nginx-config -n nginx-ingress`
 Name:         nginx-config
 Namespace:    nginx-ingress
 Labels:       <none>
