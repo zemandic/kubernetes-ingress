@@ -59,7 +59,7 @@ There are two settings that need to be set to enable more debug/verbose logging 
 This document will cover how to enable both.
 
 
-You can use the Ingress Controller command line arguments. This is a great way to increase debug log levels for both the Ingress Controller as well as NGINX.
+Using the command line arguments can be used to increase debug log levels for both the NGINX Ingress Controller as well as NGINX itself.
 When using `manifest` for deployment:
 
 1.) Use the command line argument `- -nginx-debug` in your deployment or daemonset
