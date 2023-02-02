@@ -195,7 +195,7 @@ Similarly, you can view the content of any generated configuration file in the /
 You can also print all NGINX configuration files together:
 
 ```
-$ kubectl exec <nginx-ingress-pod> -n nginx-ingress -- nginx -T
+`kubectl exec <nginx-ingress-pod> -n nginx-ingress -- nginx -T`
 ```
 
 However, this command will fail if any of the configuration files is not valid.
