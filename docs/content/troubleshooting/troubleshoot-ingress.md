@@ -1,7 +1,7 @@
 Checking the Events of an Ingress Resource
 After you create or update an Ingress resource, you can immediately check if the NGINX configuration for that Ingress resource was successfully applied by NGINX:
 
-$ kubectl describe ing cafe-ingress
+`kubectl describe ing cafe-ingress`
 Name:             cafe-ingress
 Namespace:        default
 . . .
