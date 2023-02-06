@@ -54,7 +54,7 @@ If you need to do additional troubleshooting for the Ingress Controller, there a
 There are two settings that need to be set to enable more debug/verbose logging for the Ingress Controller.
 
 1. Command Line Arguments
-2. configmap settings
+2. Configmap Settings
 
 This document will cover how to enable both.
 
