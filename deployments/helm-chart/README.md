@@ -23,7 +23,7 @@ This step is required if you're installing the chart using its sources. Addition
 
 1. Clone the Ingress Controller repo:
     ```console
-    $ git clone https://github.com/nginxinc/kubernetes-ingress --branch v3.0.0
+    $ git clone https://github.com/nginxinc/kubernetes-ingress --branch v3.0.2
     ```
     **Note**: If you want to use the experimental repository (`edge`), remove the `--branch` flag and value.
 
@@ -159,7 +159,7 @@ Parameter | Description | Default
 `controller.logLevel` | The log level of the Ingress Controller. | 1
 `controller.image.digest ` | The image digest of the Ingress Controller. | None
 `controller.image.repository` | The image repository of the Ingress Controller. | nginx/nginx-ingress
-`controller.image.tag` | The tag of the Ingress Controller image. | 3.0.0
+`controller.image.tag` | The tag of the Ingress Controller image. | 3.0.2
 `controller.image.pullPolicy` | The pull policy for the Ingress Controller image. | IfNotPresent
 `controller.lifecycle` | The lifecycle of the Ingress Controller pods. | {}
 `controller.customConfigMap` | The name of the custom ConfigMap used by the Ingress Controller. If set, then the default config is ignored. | ""
@@ -178,6 +178,7 @@ Parameter | Description | Default
 `controller.tolerations` | The tolerations of the Ingress Controller pods. | []
 `controller.affinity` | The affinity of the Ingress Controller pods. | {}
 `controller.topologySpreadConstraints` | The topology spread constraints of the Ingress controller pods. | {}
+`controller.env` | The additional environment variables to be set on the Ingress Controller pods. | []
 `controller.volumes` | The volumes of the Ingress Controller pods. | []
 `controller.volumeMounts` | The volumeMounts of the Ingress Controller pods. | []
 `controller.initContainers` | InitContainers for the Ingress Controller pods. | []
@@ -255,10 +256,14 @@ Parameter | Description | Default
 `controller.autoscaling.maxReplicas` | Maximum number of replicas for the HPA. | 3
 `controller.autoscaling.targetCPUUtilizationPercentage` | The target CPU utilization percentage. | 50
 `controller.autoscaling.targetMemoryUtilizationPercentage` | The target memory utilization percentage. | 50
-`controller.strategy` | Specifies the strategy used to replace old Pods by new ones. [docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | {}
+`controller.podDisruptionBudget.enabled` | Enables PodDisruptionBudget. | false
+`controller.podDisruptionBudget.annotations` | The annotations of the Ingress Controller pod disruption budget | {}
+`controller.podDisruptionBudget.minAvailable` | The number of Ingress Controller pods that should be available. This is a mutually exclusive setting with "maxUnavailable". | 0
+`controller.podDisruptionBudget.maxUnavailable` | The number of Ingress Controller pods that can be unavailable. This is a mutually exclusive setting with "minAvailable". | 0
+`controller.strategy` | Specifies the strategy used to replace old Pods with new ones. Docs for [Deployment update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) and [Daemonset update strategy](https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/#daemonset-update-strategy) | {}
 `controller.disableIPV6` | Disable IPV6 listeners explicitly for nodes that do not support the IPV6 stack. | false
 `rbac.create` | Configures RBAC. | true
-`prometheus.create` | Expose NGINX or NGINX Plus metrics in the Prometheus format. | false
+`prometheus.create` | Expose NGINX or NGINX Plus metrics in the Prometheus format. | true
 `prometheus.port` | Configures the port to scrape the metrics. | 9113
 `prometheus.scheme` | Configures the HTTP scheme to use for connections to the Prometheus endpoint. | http
 `prometheus.secret` | The namespace / name of a Kubernetes TLS Secret. If specified, this secret is used to secure the Prometheus endpoint with TLS connections. | ""

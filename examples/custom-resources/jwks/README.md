@@ -21,7 +21,7 @@ In this example, KeyCloak is deployed as a single container for the purpose of e
 
 ## Step 1 - Deploy a TLS Secret
 
-Create a secret with the TLS certificate and key that will be used for TLS termination of the web application and Keycloak:
+Create a secret with the TLS certificate and key that will be used for TLS termination of the Keycloak application:
 ```
 $ kubectl apply -f tls-secret.yaml
 ```
@@ -112,7 +112,7 @@ This can currently be done using `http-snippets`. Please refer to our document o
 
 The code block below is an example of the updated configmap which adds `subrequest_output_buffer_size` under the http context in the nginx.conf.
 
-NOTE: The value of `subrequest_output_buffer_size` is only an example value and should be changed to suite your environment.
+NOTE: The value of `subrequest_output_buffer_size` is only an example value and should be changed to suit your environment.
 ```
 kind: ConfigMap
 apiVersion: v1
