@@ -115,6 +115,7 @@ spec:
 {{ toYaml .Values.controller.resources | indent 10 }}
         securityContext:
           allowPrivilegeEscalation: true
+          readOnlyRootFilesystem: true
           runAsUser: 101 #nginx
           runAsNonRoot: true
           capabilities:
@@ -122,9 +123,15 @@ spec:
             - ALL
             add:
             - NET_BIND_SERVICE
-{{- if or (.Values.controller.volumeMounts) (.Values.nginxServiceMesh.enable) }}
         volumeMounts:
-{{- end }}
+        - mountPath: /etc/nginx
+          name: nginx-etc
+        - mountPath: /var/cache/nginx
+          name: nginx-cache
+        - mountPath: /var/lib/nginx
+          name: nginx-lib
+        - mountPath: /var/log/nginx
+          name: nginx-log
 {{- if .Values.nginxServiceMesh.enable }}
         - mountPath: /run/spire/sockets
           name: spire-agent-socket
@@ -238,8 +245,35 @@ spec:
 {{- if .Values.controller.extraContainers }}
       {{ toYaml .Values.controller.extraContainers | nindent 6 }}
 {{- end }}
+      securityContext:
+        fsGroup: 101 #nginx
+      volumes:
+      - name: nginx-etc
+        emptyDir: {}
+      - name: nginx-cache
+        emptyDir: {}
+      - name: nginx-lib
+        emptyDir: {}
+      - name: nginx-log
+        emptyDir: {}
+      initContainers:
+      - name: init-{{ include "nginx-ingress.name" . }}
+        image: {{ include "nginx-ingress.image" . }}
+        imagePullPolicy: "{{ .Values.controller.image.pullPolicy }}"
+        command: ['cp', '-vdR', '/etc/nginx/.', '/mnt/etc']
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsUser: 101 #nginx
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - mountPath: /mnt/etc
+          name: nginx-etc
 {{- if .Values.controller.initContainers }}
-      initContainers: {{ toYaml .Values.controller.initContainers | nindent 8 }}
+{{ toYaml .Values.controller.initContainers | indent 6 }}
 {{- end }}
 {{- if .Values.controller.strategy }}
   strategy:
