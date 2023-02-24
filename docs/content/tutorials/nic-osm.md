@@ -2,7 +2,7 @@
 
 Open Service Mesh will work with both versions of [F5 NGINX Ingress controller](https://github.com/nginxinc/kubernetes-ingress): the free as well as the NGINX Plus versions.
 
-Below is a link to the official F5 NGINX Ingress controller documentation.    
+Below is a link to the official F5 NGINX Ingress controller documentation.
 [F5 NGINX Ingress controller](https://docs.nginx.com/nginx-ingress-controller/)
 
 # Integrating NGINX Ingress Controller with Open Service Mesh
@@ -257,7 +257,7 @@ curl http://httpbin.example.com/get -v
 * Connection #0 to host httpbin.example.com left intact
 ```
 
-# NGINX Ingress controller and OSM with sidecar injected 
+# NGINX Ingress controller and OSM with sidecar injected
 
 First install OSM in the cluster
 
@@ -346,7 +346,7 @@ spec:
   upstreams:
   - name: httpbin
     service: httpbin
-    port: 14001 
+    port: 14001
     use-cluster-ip: true
   routes:
   - path: /
@@ -400,5 +400,3 @@ Test your configuration:
 }
 * Connection #0 to host httpbin.example.com left intact
 ```
-
-
