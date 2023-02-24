@@ -81,7 +81,7 @@ def ingress_setup(request, kube_apis, ingress_controller_endpoint, test_namespac
 
 
 @pytest.mark.ingresses
-# @pytest.mark.smoke
+@pytest.mark.smoke
 class TestPrometheusExporter:
     @pytest.mark.parametrize(
         "ingress_controller, expected_metrics",
