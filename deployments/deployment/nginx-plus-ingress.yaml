@@ -65,6 +65,8 @@ spec:
               name: nginx-lib
             - mountPath: /var/log/nginx
               name: nginx-log
+            - mountPath: /var/log
+              name: default-log
           env:
             - name: POD_NAMESPACE
               valueFrom:
@@ -99,6 +101,8 @@ spec:
         - name: nginx-lib
           emptyDir: {}
         - name: nginx-log
+          emptyDir: {}
+        - name: default-log
           emptyDir: {}
       initContainers:
         - image: nginx-plus-ingress:3.0.2
