@@ -331,7 +331,7 @@ nginx-ingress-7b9557ddc6-zw7l5   2/2     Running   1 (5m8s ago)   5m19s
 2/2 shows we have two containers in the NGINX Ingress controller pod: NGINX Ingress and Envoy
 
 
-Configure your NGINX VirtualServer yaml definitions to include the `policy` field like the following example:
+Configure your NGINX VirtualServer yaml definitions to similar configuration below.
 
 ```yaml
 apiVersion: k8s.nginx.org/v1
