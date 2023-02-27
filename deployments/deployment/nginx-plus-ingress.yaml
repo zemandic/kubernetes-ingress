@@ -65,6 +65,16 @@ spec:
           name: nginx-lib
         - mountPath: /var/log/nginx
           name: nginx-log
+        - mountPath: /opt/app_protect
+          name: app-protect-opt
+        - mountPath: /etc/app_protect
+          name: app-protect-etc
+        - mountPath: /usr/bin
+          name: default-bin
+        - mountPath: /usr/sbin
+          name: default-sbin
+        - mountPath: /usr/share
+          name: default-share
         - mountPath: /var/log
           name: default-log
         env:
@@ -102,8 +112,18 @@ spec:
         emptyDir: {}
       - name: nginx-log
         emptyDir: {}
+      - name: app-protect-opt
+        emptyDir: {}
+      - name: app-protect-etc
+        emptyDir: {}
+      - name: default-bin
+        emptyDir: {}
+      - name: default-sbin
+        emptyDir: {}
+      - name: default-share
+        emptyDir: {}
       - name: default-log
-        emptyDir: { }
+        emptyDir: {}
       initContainers:
       - image: nginx-plus-ingress:3.0.2
         imagePullPolicy: IfNotPresent
