@@ -400,4 +400,3 @@ curl http://httpbin.example.com/get -v
 }
 * Connection #0 to host httpbin.example.com left intact
 ```
-
