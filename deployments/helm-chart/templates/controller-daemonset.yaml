@@ -110,7 +110,7 @@ spec:
 {{- end }}
         securityContext:
           allowPrivilegeEscalation: true
-          readOnlyRootFilesystem: {{- if .Values.controller.readOnlyRootFilesystem }}
+          readOnlyRootFilesystem: {{ .Values.controller.readOnlyRootFilesystem }}
           runAsUser: 101 #nginx
           runAsNonRoot: true
           capabilities:
