@@ -13,7 +13,7 @@ controller:
   nginxplus: false
 
   ## Flag to allow the Ingress Controller to run using Read Only Root File System.
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
 
   # Timeout in milliseconds which the Ingress Controller will wait for a successful NGINX reload after a change or at the initial start.
   nginxReloadTimeout: 60000
