@@ -731,8 +731,8 @@ func generateTLSPassthroughHostsConfig(tlsPassthroughPairs map[string]tlsPassthr
 func (cnf *Configurator) addOrUpdateCASecret(secret *api_v1.Secret) string {
 	name := objectMetaToFileName(&secret.ObjectMeta)
 	crtData, crlData := GenerateCAFileContent(secret)
-	crtSecretName := name + CACrtKey
-	crlSecretName := name + CACrlKey
+	crtSecretName := fmt.Sprintf("%s-%s", name, CACrtKey)
+	crlSecretName := fmt.Sprintf("%s-%s", name, CACrlKey)
 	crtFileName := cnf.nginxManager.CreateSecret(crtSecretName, crtData, nginx.TLSSecretFileMode)
 	crlFileName := cnf.nginxManager.CreateSecret(crlSecretName, crlData, nginx.TLSSecretFileMode)
 	return fmt.Sprintf("%s %s", crtFileName, crlFileName)

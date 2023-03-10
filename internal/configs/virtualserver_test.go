@@ -2691,8 +2691,8 @@ func TestGeneratePolicies(t *testing.T) {
 		vsNamespace:    "default",
 		vsName:         "test",
 	}
-	ingressMTLSCertPath := "/etc/nginx/secrets/default-ingress-mtls-secretca.crt"
-	ingressMTLSCrlPath := "/etc/nginx/secrets/default-ingress-mtls-secretca.crl"
+	ingressMTLSCertPath := "/etc/nginx/secrets/default-ingress-mtls-secret-ca.crt"
+	ingressMTLSCrlPath := "/etc/nginx/secrets/default-ingress-mtls-secret-ca.crl"
 	ingressMTLSCertAndCrlPath := fmt.Sprintf("%s %s", ingressMTLSCertPath, ingressMTLSCrlPath)
 	policyOpts := policyOptions{
 		tls: true,
@@ -3305,7 +3305,7 @@ func TestGeneratePoliciesFails(t *testing.T) {
 	dryRunOverride := true
 	rejectCodeOverride := 505
 
-	ingressMTLSCertPath := "/etc/nginx/secrets/default-ingress-mtls-secretca.crt"
+	ingressMTLSCertPath := "/etc/nginx/secrets/default-ingress-mtls-secret-ca.crt"
 
 	tests := []struct {
 		policyRefs        []conf_v1.PolicyReference
