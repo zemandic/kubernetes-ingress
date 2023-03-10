@@ -7,15 +7,14 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
+	"github.com/nginxinc/kubernetes-ingress/internal/configs/version2"
 	"github.com/nginxinc/kubernetes-ingress/internal/k8s/secrets"
 	"github.com/nginxinc/kubernetes-ingress/internal/nginx"
+	conf_v1 "github.com/nginxinc/kubernetes-ingress/pkg/apis/configuration/v1"
 	api_v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
-
-	"github.com/nginxinc/kubernetes-ingress/internal/configs/version2"
-	conf_v1 "github.com/nginxinc/kubernetes-ingress/pkg/apis/configuration/v1"
 )
 
 const (
@@ -908,11 +907,23 @@ func (p *policiesCfg) addIngressMTLSConfig(
 		verifyClient = ingressMTLS.VerifyClient
 	}
 
-	p.IngressMTLS = &version2.IngressMTLS{
-		ClientCert:   secretRef.Path,
-		VerifyClient: verifyClient,
-		VerifyDepth:  verifyDepth,
+	caFiles := strings.Fields(secretRef.Path)
+
+	if _, hasCrlKey := secretRef.Secret.Data[CACrlKey]; hasCrlKey {
+		p.IngressMTLS = &version2.IngressMTLS{
+			ClientCert:   caFiles[0],
+			ClientCrl:    caFiles[1],
+			VerifyClient: verifyClient,
+			VerifyDepth:  verifyDepth,
+		}
+	} else {
+		p.IngressMTLS = &version2.IngressMTLS{
+			ClientCert:   caFiles[0],
+			VerifyClient: verifyClient,
+			VerifyDepth:  verifyDepth,
+		}
 	}
+
 	return res
 }
 
