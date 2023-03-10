@@ -24,6 +24,11 @@ spec:
         sysctls:
           - name: "net.ipv4.ip_unprivileged_port_start"
             value: "0"
+      volumes:
+        - name: crl-volume
+          hostPath:
+            path: /data/crl #local directory that contains the CRL
+            type: Directory
       containers:
       - image: nginx-plus-ingress:3.0.2
         imagePullPolicy: IfNotPresent
@@ -58,6 +63,9 @@ spec:
           capabilities:
             drop:
             - ALL
+        volumeMounts:
+        - mountPath: /etc/nginx/secrets
+          name: crl-volume
         env:
         - name: POD_NAMESPACE
           valueFrom:

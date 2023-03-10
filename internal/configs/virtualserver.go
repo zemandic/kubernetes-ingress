@@ -909,10 +909,23 @@ func (p *policiesCfg) addIngressMTLSConfig(
 
 	caFields := strings.Fields(secretRef.Path)
 
+	if _, hasCrlKey := secretRef.Secret.Data[CACrlKey]; hasCrlKey && ingressMTLS.Crl != "" {
+		res.addWarningf("Both ca.crl and ingressMTLS.Crl fields cannot be used")
+		res.isError = true
+		return res
+	}
+
 	if _, hasCrlKey := secretRef.Secret.Data[CACrlKey]; hasCrlKey {
 		p.IngressMTLS = &version2.IngressMTLS{
 			ClientCert:   caFields[0],
 			ClientCrl:    caFields[1],
+			VerifyClient: verifyClient,
+			VerifyDepth:  verifyDepth,
+		}
+	} else if ingressMTLS.Crl != "" {
+		p.IngressMTLS = &version2.IngressMTLS{
+			ClientCert:   caFields[0],
+			ClientCrl:    fmt.Sprintf("%s/%s", DefaultSecretPath, ingressMTLS.Crl),
 			VerifyClient: verifyClient,
 			VerifyDepth:  verifyDepth,
 		}
