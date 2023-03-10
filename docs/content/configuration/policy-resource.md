@@ -262,6 +262,19 @@ ingressMTLS:
   verifyDepth: 1
 ```
 
+Below is an example of the `ingress-mtls-secret` using the secret type `nginx.org/ca`
+```yaml
+kind: Secret
+metadata:
+  name: ingress-mtls-secret
+apiVersion: v1
+type: nginx.org/ca
+data:
+  ca.crt: <base64encoded-certificate>
+```
+
+You can optionally add the `ca.crl` field to the `nginx.org/ca` secret type, which accepts a base64 encoded certificate revocation list (crl)
+
 A VirtualServer that references an IngressMTLS policy must:
 * Enable [TLS termination](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#virtualservertls).
 * Reference the policy in the VirtualServer [`spec`](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#virtualserver-specification). It is not allowed to reference an IngressMTLS policy in a [`route `](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#virtualserverroute) or in a VirtualServerRoute [`subroute`](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#virtualserverroutesubroute).
