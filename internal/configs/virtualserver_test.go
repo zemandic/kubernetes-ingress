@@ -3126,7 +3126,7 @@ func TestGeneratePolicies(t *testing.T) {
 					VerifyDepth:  1,
 				},
 			},
-			msg: "ingressMTLS reference",
+			msg: "ingressMTLS reference with ca.crl",
 		},
 		{
 			policyRefs: []conf_v1.PolicyReference{
