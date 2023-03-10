@@ -907,23 +907,22 @@ func (p *policiesCfg) addIngressMTLSConfig(
 		verifyClient = ingressMTLS.VerifyClient
 	}
 
-	caFiles := strings.Fields(secretRef.Path)
+	caFields := strings.Fields(secretRef.Path)
 
 	if _, hasCrlKey := secretRef.Secret.Data[CACrlKey]; hasCrlKey {
 		p.IngressMTLS = &version2.IngressMTLS{
-			ClientCert:   caFiles[0],
-			ClientCrl:    caFiles[1],
+			ClientCert:   caFields[0],
+			ClientCrl:    caFields[1],
 			VerifyClient: verifyClient,
 			VerifyDepth:  verifyDepth,
 		}
 	} else {
 		p.IngressMTLS = &version2.IngressMTLS{
-			ClientCert:   caFiles[0],
+			ClientCert:   caFields[0],
 			VerifyClient: verifyClient,
 			VerifyDepth:  verifyDepth,
 		}
 	}
-
 	return res
 }
 
