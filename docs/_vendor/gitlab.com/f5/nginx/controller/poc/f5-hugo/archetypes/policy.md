@@ -28,45 +28,74 @@ authors: []
 
 ## Overview
 
-Write an introduction for the policy. Briefly explain what the policy is for.
+<!-- 
+If your topic is for a global policy, add the following include: 
 
-Introduce and explain any new concepts the user may need to understand before proceeding.
+{{< include "acm/how-to/policies-intro" >}}
 
----
+- OR -
 
-## Before You Begin
+If your topic is for an API GW policy, add this include:
 
-To complete the steps in this guide, you need the following:
+{{< include "acm/how-to/policies-proxy-intro.md" >}}
 
-- API Connectivity Manager is installed, licensed, and running
-- You have [one or more Environments with an API Gateway]({{< relref "acm/getting-started/add-api-gateway.md" >}})
-- You have [published one or more API Gateways]({{< relref "acm/getting-started/publish-api-proxy.md" >}})
-
-### How to Access the User Interface
-
-{{< include "acm/how-to/access-acm-ui" >}}
-
-### How to Access the REST API
-
-{{< include "acm/how-to/access-acm-api" >}}
+-->
 
 ---
 
-## Create an XYZ Policy
+## About XYZ Policy
+
+<!--
+Explain what the policy does and what it can be used for.
+-->
+
+#### Intended Audience
+
+<!--
+Specify the intended audience for this guide, that is, who is responsible for applying and/or configuring the policy? For example, and Infrastructure Administrator.
+-->
+
+---
+
+## Workflow for Applying Policy
+
+<!--
+Add the high-level steps the user must take to apply the policy. For example:
+
+- Create an environment or edit an existing one.
+- Check the advanced settings for the environment to see if the policy has been applied.
+- Edit the policy to make changes for each environment. Save and publish the changes.
+
+-->
+
+---
+
+## Policy Settings
+
+<!-- Update the following table with the policy's params -->
+
+The following table lists the configurable settings and their default values for the policy.
+
+{{< raw-html>}}<div class="table-responsive">{{</raw-html>}}
+{{< bootstrap-table "table table-striped table-bordered" >}}
+| Field        | Datatype | Possible Values     | Description                                        | Required | Default               |
+|--------------|----------|---------------------|----------------------------------------------------|----------|-----------------------|
+| `users.id`   | integer  | A unique int >= 1   | Description for value.                             | Yes      | System assigned       |
+| `users.name` | string   | Example: `Jane Doe` | A short description of what the field is used for. | Yes      | Add the default value |
+| `user.age`   | integer  | 1–110               | Description for the value                          | Yes      |                       |
+
+{{< /bootstrap-table >}}
+{{< raw-html>}}</div>{{</raw-html>}}
+
+---
+
+## Adding XYZ Policy
 
 {{<tabs name="policy-implementation">}}
 
-{{%tab name="UI"%}}
-
-To create an XYZ policy using the web interface:
-
-1. Go to the FQDN for your NGINX Management Suite host in a web browser and log in. Then, from the Launchpad menu, select **API Connectivity Manager**.
-2. Add other steps here
-3. As a numbered list.
-
-{{%/tab%}}
-
 {{%tab name="API"%}}
+
+{{<see-also>}}{{< include "acm/how-to/access-acm-api.md" >}}{{</see-also>}}
 
 To create an XYZ policy using the REST API, send an HTTP `POST` request to the Add-Endpoint-Name-Here endpoint.
 
@@ -100,18 +129,15 @@ To create an XYZ policy using the REST API, send an HTTP `POST` request to the A
 
 </details>
 
-<br>
+{{%/tab%}}
 
-{{< raw-html>}}<div class="table-responsive">{{</raw-html>}}
-{{< bootstrap-table "table table-striped table-bordered" >}}
-| Field  | Datatype | Possible Values     | Description                                        | Required | Default               |
-|--------|----------|---------------------|----------------------------------------------------|----------|-----------------------|
-| `id`   | integer  | A unique int >= 1   | Description for value.                             | Yes      | System assigned       |
-| `name` | string   | Example: `Jane Doe` | A short description of what the field is used for. | Yes      | Add the default value |
-| `age`  | integer  | 1–110               | Description for the value                          | Yes      |                       |
+{{%tab name="UI"%}}
 
-{{< /bootstrap-table >}}
-{{< raw-html>}}</div>{{</raw-html>}}
+To create an XYZ policy using the web interface:
+
+1. Go to the FQDN for your NGINX Management Suite host in a web browser and log in. Then, from the Launchpad menu, select **API Connectivity Manager**.
+2. Add other steps here
+3. As a numbered list.
 
 {{%/tab%}}
 
@@ -121,13 +147,23 @@ To create an XYZ policy using the REST API, send an HTTP `POST` request to the A
 
 ## Verify the Policy
 
+<!--
+Add verification instructions to confirm that the policy has been correctly implemented and is being enforced.
+-->
+
 Confirm that the policy has been set up and configured correctly by taking these steps:
 
-- Add verification steps here
+- Add steps to verify policy was applied successfully to the the management plane.
+
+Confirm the policy is being enforced:
+
+- Add steps to verify policy is being enforced on the data plane. What can users expect to see?
 
 ---
 
 ## Troubleshooting
+
+<!-- Add troubleshooting steps for issues users might encounter and can self-solve. The purpose of this section is to deflect customer calls to Support. -->
 
 For help resolving common issues when setting up and configuring the policy, follow the steps in this section. If you cannot find a solution to your specific issue, reach out to [NGINX Customer Support]({{< relref "support/contact-support.md" >}}) for assistance.
 
@@ -135,14 +171,18 @@ For help resolving common issues when setting up and configuring the policy, fol
 
 Add a description for the issue. Include any error messages users might see.
 
-Resolution/workaround:
+Resolution/Workaround:
 
-- Add steps here.
+1. Add steps here
+2. As a
+3. numbered list.
 
 ### Issue 2
 
 Add a description for the issue. Include any error messages users might see.
 
-Resolution/workaround:
+Resolution/Workaround:
 
-- Add steps here.
+1. Add steps here
+2. As a
+3. numbered list.

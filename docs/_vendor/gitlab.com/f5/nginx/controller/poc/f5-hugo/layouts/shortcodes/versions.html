@@ -2,7 +2,7 @@
   Parameters: "first version"  "last version" "product"
   First version can be a version number, e.g. "3.18", or "first" to use the lowest value in the array 
   Last version can be a version number, e.g. "3.21", or "latest" to use the highest value in the array
-  Product can be "ctrlvers" "apimvers" "adcvers" "nimvers" "acmvers" */}}
+  Product can be "ctrlvers" "apimvers" "adcvers" "nimvers" "acmvers" "secvers" */}}
   {{ $start := string (.Get 0)  }}
   {{ $end := string (.Get 1)  }}
   {{ $product := string (.Get 2)  }}
@@ -24,6 +24,9 @@
   {{else if eq $product "acmvers" }}
     {{ $ver = $.Site.Params.acmvers }}
     {{ $prodname = "NGINX Management Suite API Connectivity Manager" }}
+  {{else if eq $product "secvers" }}
+    {{ $ver = $.Site.Params.secvers }}
+    {{ $prodname = "NGINX Management Suite Security Monitoring Module" }}
   {{else}}
     {{ $ver = $.Site.Params.ctrlvers }}
     {{ $prodname = "NGINX Controller" }}

@@ -37,32 +37,37 @@
 <meta http-equiv="last-modified" content="{{ .Page.Lastmod.Format "02/01/2006" }}" />
 {{ end }}
 
-
-{{/* set custom CSP to load styles and scripts with special handling for GTM scripts (requires unsafe-inline) and Dev Portal page(s) (requires 'unsafe-eval') */}}
-<meta http-equiv="Content-Security-Policy" content="script-src 
-    'self' 
-    https://code.jquery.com/ 
-    https://cdn.jsdelivr.net/ 
-    https://static.cloud.coveo.com 
-    https://kit.fontawesome.com/ 
-    https://*.netlify.app 
-    https://gist.github.com
+{{/* set custom CSP to load styles and scripts with special handling for GTM scripts (requires unsafe-inline) 
+    and Dev Portal page(s) (requires 'unsafe-eval') 
+    Netlify entries allow the drawer app to run in deploy previews 
+*/}}
+<meta http-equiv="Content-Security-Policy" content=" child-src 'self' app.netlify.com; 
+    script-src 'self' 
+    'nonce-8r7pmd55segi'
+    'nonce-uejfk329l877'
+    app.netlify.com 
+    netlify-cdp-loader.netlify.app
+    https://gist.github.com 
     https://tag.demandbase.com/pscSDsz4.min.js
     https://munchkin.brightfunnel.com/js/build/bf-munchkin.min.js
-    https://www.googletagmanager.com/gtm.js
     https://www.google-analytics.com/
-    https://www.google-analytics.com/analytics.js
-    https://www.google-analytics.com/plugins/ua/linkid.js
-    https://cdn.bizible.com/scripts/bizible.js
-    https://cdn.bizible.com/xdc.js
+    cdn.bizible.com/
+    mktg.tags.f5.com/
     https://consent.trustarc.com/
-    https://f5networksglobalprod.122.2o7.net/
-    https://f5networksnginxdocs.122.2o7.net/
-    https://*.f5.com
-    'unsafe-inline'
-    {{ if in .Params.doctypes "devportal" }} 'unsafe-eval' {{end}}; 
-    worker-src 'self' blob:">
+    https://www.googletagmanager.com/
+    cdn.f5.com
+    mktg.aa.f5.com/
+    https://consent.trustarc.com/
+    https://kit.fontawesome.com/
+    https://code.jquery.com/ 
+    https://cdn.jsdelivr.net/ 
+    https://static.cloud.coveo.com/ 
+    {{ if in .Params.doctypes "devportal" }} 'unsafe-eval' {{end}};
+    frame-src https://consent.trustarc.com/ mktg.tags.f5.com/ www.googletagmanager.com/ app.netlify.com;
+    worker-src 'self' blob: ">
 {{/* end */}}
+
+
 
 <!-- build metadata -->
 <meta property="environment" type="{{ hugo.Environment }}" />
