@@ -272,8 +272,41 @@ type: nginx.org/ca
 data:
   ca.crt: <base64encoded-certificate>
 ```
+#### Using a Certificate Revocation List
+The IngressMTLS policy supports configuring at CRL for your policy.
+This can be done in one of two ways.
 
-You can optionally add the `ca.crl` field to the `nginx.org/ca` secret type, which accepts a base64 encoded certificate revocation list (crl)
+> Note: Only one of these configurations options can be used at a time.
+
+1. Adding the `ca.crl` field to the `nginx.org/ca` secret type, which accepts a base64 encoded certificate revocation list (crl).
+Example Yaml:
+```yaml
+kind: Secret
+metadata:
+  name: ingress-mtls-secret
+apiVersion: v1
+type: nginx.org/ca
+data:
+  ca.crt: <base64encoded-certificate>
+  ca.crl: <base64encoded-crl>
+```
+
+2. Adding the `Crl` field to your IngressMTLS policy spec with the name of the CRL.
+Example Yaml:
+```yaml
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: ingress-mtls-policy
+spec:
+ingressMTLS:
+    clientCertSecret: ingress-mtls-secret
+    crl: webapp.crl
+    verifyClient: "on"
+    verifyDepth: 1
+```
+
+> Note: When using this configuration the Ingress Controller will expect the CRL to be located at /etc/nginx/secrets
 
 A VirtualServer that references an IngressMTLS policy must:
 * Enable [TLS termination](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#virtualservertls).
