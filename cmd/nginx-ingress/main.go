@@ -395,7 +395,7 @@ func startApAgentsAndPlugins(nginxManager nginx.Manager) (chan error, chan error
 		aPPluginDone = make(chan error, 1)
 		aPAgentDone = make(chan error, 1)
 
-		nginxManager.AppProtectAgentStart(aPAgentDone, *appProtectLogLevel)
+		//nginxManager.AppProtectAgentStart(aPAgentDone, *appProtectLogLevel)
 		nginxManager.AppProtectPluginStart(aPPluginDone)
 	}
 
