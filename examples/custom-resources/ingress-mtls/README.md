@@ -2,7 +2,7 @@
 
 In this example, we deploy a web application, configure load balancing for it via a VirtualServer, and apply an Ingress MTLS policy.
 
-> Note: The Ingress MTLS policy supports configuring a Certificate Revocation List (CRL). 
+> Note: The Ingress MTLS policy supports configuring a Certificate Revocation List (CRL).
 > See [Using a Certificate Revocation List](https://docs.nginx.com/nginx-ingress-controller/configuration/policy-resource/#using-a-certificate-revocation-list) for details on how to set this option.
 
 ## Prerequisites
