@@ -336,6 +336,7 @@ We use the `requestHeaders` of the [Action.Proxy](/nginx-ingress-controller/conf
 |``clientCertSecret`` | The name of the Kubernetes secret that stores the CA certificate. It must be in the same namespace as the Policy resource. The secret must be of the type ``nginx.org/ca``, and the certificate must be stored in the secret under the key ``ca.crt``, otherwise the secret will be rejected as invalid. | ``string`` | Yes |
 |``verifyClient`` | Verification for the client. Possible values are ``"on"``, ``"off"``, ``"optional"``, ``"optional_no_ca"``. The default is ``"on"``. | ``string`` | No |
 |``verifyDepth`` | Sets the verification depth in the client certificates chain. The default is ``1``. | ``int`` | No |
+|``crl`` | The name of the Certificate Revocation List. The Ingress Controller will look for this file in `/etc/nginx/secrets` | ``string`` | No |
 {{% /table %}}
 
 #### IngressMTLS Merging Behavior

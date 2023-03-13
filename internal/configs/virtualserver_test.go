@@ -4070,7 +4070,7 @@ func TestGeneratePoliciesFails(t *testing.T) {
 			},
 			expectedWarnings: Warnings{
 				nil: {
-					`Both ca.crl and ingressMTLS.Crl fields cannot be used`,
+					`Both ca.crl and ingressMTLS.crl fields cannot be used`,
 				},
 			},
 			expectedOidc: &oidcPolicyCfg{},
