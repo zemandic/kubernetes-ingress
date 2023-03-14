@@ -3339,6 +3339,7 @@ func TestGeneratePoliciesFails(t *testing.T) {
 	rejectCodeOverride := 505
 
 	ingressMTLSCertPath := "/etc/nginx/secrets/default-ingress-mtls-secret-ca.crt"
+	ingressMTLSCrlPath := "/etc/nginx/secrets/default-ingress-mtls-secret-ca.crl"
 
 	tests := []struct {
 		policyRefs        []conf_v1.PolicyReference
@@ -4064,13 +4065,17 @@ func TestGeneratePoliciesFails(t *testing.T) {
 			},
 			context: "spec",
 			expected: policiesCfg{
-				ErrorReturn: &version2.Return{
-					Code: 500,
+				IngressMTLS: &version2.IngressMTLS{
+					ClientCert:   ingressMTLSCertPath,
+					ClientCrl:    ingressMTLSCrlPath,
+					VerifyClient: "on",
+					VerifyDepth:  1,
 				},
+				ErrorReturn: nil,
 			},
 			expectedWarnings: Warnings{
 				nil: {
-					`Both ca.crl and ingressMTLS.crl fields cannot be used`,
+					`Both ca.crl and ingressMTLS.crl fields cannot be used. ca.crl will be ignored and default/ingress-mtls-policy will be applied`,
 				},
 			},
 			expectedOidc: &oidcPolicyCfg{},
