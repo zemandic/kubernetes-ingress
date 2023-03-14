@@ -11,6 +11,7 @@ from suite.utils.vs_vsr_resources_utils import (
     patch_virtual_server_from_yaml,
     read_vs,
     read_vsr,
+    delete_and_create_vs_from_yaml,
 )
 
 std_vs_src = f"{TEST_DATA}/virtual-server/standard/virtual-server.yaml"
@@ -290,7 +291,8 @@ class TestIngressMtlsPolicyVS:
         )
 
         print(f"Patch vs with policy: {policy_src}")
-        patch_virtual_server_from_yaml(
+
+        delete_and_create_vs_from_yaml(
             kube_apis.custom_objects,
             virtual_server_setup.vs_name,
             vs_src,
@@ -310,7 +312,7 @@ class TestIngressMtlsPolicyVS:
         vs_res = read_vs(kube_apis.custom_objects, test_namespace, virtual_server_setup.vs_name)
         teardown_policy(kube_apis, test_namespace, tls_secret, pol_name, mtls_secret)
 
-        patch_virtual_server_from_yaml(
+        delete_and_create_vs_from_yaml(
             kube_apis.custom_objects,
             virtual_server_setup.vs_name,
             std_vs_src,
