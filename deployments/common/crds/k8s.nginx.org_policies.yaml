@@ -262,8 +262,6 @@ spec:
                   properties:
                     clientCertSecret:
                       type: string
-                    crl:
-                      type: string
                     verifyClient:
                       type: string
                     verifyDepth:
