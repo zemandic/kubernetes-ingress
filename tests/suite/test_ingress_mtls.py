@@ -41,6 +41,7 @@ key_not_revoked = f"{TEST_DATA}/ingress-mtls/client-auth/not-revoked/client-key.
 crt_revoked = f"{TEST_DATA}/ingress-mtls/client-auth/revoked/client-cert.pem"
 key_revoked = f"{TEST_DATA}/ingress-mtls/client-auth/revoked/client-key.pem"
 
+
 def setup_policy(kube_apis, test_namespace, mtls_secret, tls_secret, policy):
     print(f"Create ingress-mtls secret")
     mtls_secret_name = create_secret_from_yaml(kube_apis.v1, test_namespace, mtls_secret)
@@ -231,11 +232,11 @@ class TestIngressMtlsPolicyVS:
             virtual_server_setup.namespace,
         )
         assert resp.status_code == expected_code and expected_text in resp.text and exception in ssl_exception
-    
+
     @pytest.mark.sslcrl
     @pytest.mark.parametrize(
         "policy_src, vs_src, mtls_secret_in, expected_code, expected_text, vs_message, vs_state",
-        [   
+        [
             (
                 mtls_pol_valid_src,
                 mtls_vs_spec_src,
@@ -277,8 +278,8 @@ class TestIngressMtlsPolicyVS:
         expected_code,
         expected_text,
         vs_message,
-        vs_state,):
-
+        vs_state,
+    ):
         session = create_sni_session()
         mtls_secret, tls_secret, pol_name = setup_policy(
             kube_apis,
