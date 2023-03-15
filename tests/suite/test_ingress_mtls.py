@@ -62,7 +62,7 @@ def teardown_policy(kube_apis, test_namespace, tls_secret, pol_name, mtls_secret
     delete_secret(kube_apis.v1, mtls_secret, test_namespace)
 
 
-@pytest.mark.smoke
+@pytest.mark.policy
 @pytest.mark.parametrize(
     "crd_ingress_controller, virtual_server_setup",
     [
@@ -234,7 +234,7 @@ class TestIngressMtlsPolicyVS:
         )
         assert resp.status_code == expected_code and expected_text in resp.text and exception in ssl_exception
 
-    @pytest.mark.sslcrl
+    @pytest.mark.smoke
     @pytest.mark.parametrize(
         "policy_src, vs_src, mtls_secret_in, expected_code, expected_text, vs_message, vs_state",
         [
@@ -290,8 +290,6 @@ class TestIngressMtlsPolicyVS:
             policy_src,
         )
 
-        print(f"Patch vs with policy: {policy_src}")
-
         delete_and_create_vs_from_yaml(
             kube_apis.custom_objects,
             virtual_server_setup.vs_name,
@@ -306,9 +304,6 @@ class TestIngressMtlsPolicyVS:
             allow_redirects=False,
             verify=False,
         )
-        print("--------------------------")
-        print(f"RESPONSE Text: {resp.text}")
-        print("--------------------------")
         vs_res = read_vs(kube_apis.custom_objects, test_namespace, virtual_server_setup.vs_name)
         teardown_policy(kube_apis, test_namespace, tls_secret, pol_name, mtls_secret)
 
@@ -325,7 +320,6 @@ class TestIngressMtlsPolicyVS:
             and vs_res["status"]["state"] == vs_state
         )
 
-    # @pytest.mark.sslcrl
     @pytest.mark.parametrize(
         "certificate, expected_code, expected_text, exception",
         [
