@@ -338,31 +338,7 @@ When configuring a CRL with the `ingressMTLS.crlFileName` field, there are addit
 1. The Ingress Controller will expect the CRL, in this case `webapp.crl`, will be in `/etc/nginx/secrets`. We recommend updating your Ingress Controller deployment to add a Volume to mount your CRL to `/etc/nginx/secrets`
 2. When updating the content of your CRL (e.g a new certificate has been revoked), NGINX will need to be reloaded to pick up the latest changes. We recommend updating the name of your CRL and applying this update to your `ingress-mtls.yaml` policy to ensure NGINX picks up the latest CRL.
 
-Below is an example yaml with the required volume and volume mounts added:
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-ingress
-  namespace: nginx-ingress
-spec:
-  ...
-  template:
-    ...
-    spec:
-      ...
-      volumes:
-      - name: nginx-crl
-        hostPath:
-          path: /data/crl # Replace this with the path to your CRL
-          type: Directory
-        ...
-      containers:
-        ...
-        volumeMounts:
-        - mountPath: /etc/nginx/secrets
-          name: nginx-crl
-```
+Please refer to the Kubernetes documentation on [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) to find the best implementation for your environment.
 
 {{% table %}}
 |Field | Description | Type | Required |
