@@ -62,7 +62,7 @@ const HtpasswdFileKey = "htpasswd"
 // CACrtKey is the key of the data field of a Secret where the cert must be stored.
 const CACrtKey = "ca.crt"
 
-// CACrlKey is the key of the data field of a Secret where the cert revocation list much be stored.
+// CACrlKey is the key of the data field of a Secret where the cert revocation list must be stored.
 const CACrlKey = "ca.crl"
 
 // ClientSecretKey is the key of the data field of a Secret where the OIDC client secret must be stored.

@@ -910,7 +910,7 @@ func (p *policiesCfg) addIngressMTLSConfig(
 	caFields := strings.Fields(secretRef.Path)
 
 	if _, hasCrlKey := secretRef.Secret.Data[CACrlKey]; hasCrlKey && ingressMTLS.Crl != "" {
-		res.addWarningf("Both ca.crl and ingressMTLS.crl fields cannot be used. ca.crl will be ignored and %s will be applied", polKey)
+		res.addWarningf("Both ca.crl in the Secret and ingressMTLS.crl fields cannot be used. ca.crl in %s will be ignored and %s will be applied", secretKey, polKey)
 	}
 
 	if ingressMTLS.Crl != "" {

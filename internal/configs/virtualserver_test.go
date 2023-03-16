@@ -4075,7 +4075,7 @@ func TestGeneratePoliciesFails(t *testing.T) {
 			},
 			expectedWarnings: Warnings{
 				nil: {
-					`Both ca.crl and ingressMTLS.crl fields cannot be used. ca.crl will be ignored and default/ingress-mtls-policy will be applied`,
+					`Both ca.crl in the Secret and ingressMTLS.crl fields cannot be used. ca.crl in default/ingress-mtls-secret will be ignored and default/ingress-mtls-policy will be applied`,
 				},
 			},
 			expectedOidc: &oidcPolicyCfg{},
