@@ -456,7 +456,7 @@ type BasicAuth struct {
 // IngressMTLS defines an Ingress MTLS policy.
 type IngressMTLS struct {
 	ClientCertSecret string `json:"clientCertSecret"`
-	Crl              string `json:"crl"`
+	CrlFileName      string `json:"crlFileName"`
 	VerifyClient     string `json:"verifyClient"`
 	VerifyDepth      *int   `json:"verifyDepth"`
 }

@@ -3144,7 +3144,7 @@ func TestGeneratePolicies(t *testing.T) {
 					Spec: conf_v1.PolicySpec{
 						IngressMTLS: &conf_v1.IngressMTLS{
 							ClientCertSecret: "ingress-mtls-secret",
-							Crl:              "default-ingress-mtls-secret-ca.crl",
+							CrlFileName:      "default-ingress-mtls-secret-ca.crl",
 							VerifyClient:     "off",
 						},
 					},
@@ -4044,7 +4044,7 @@ func TestGeneratePoliciesFails(t *testing.T) {
 					Spec: conf_v1.PolicySpec{
 						IngressMTLS: &conf_v1.IngressMTLS{
 							ClientCertSecret: "ingress-mtls-secret",
-							Crl:              "default-ingress-mtls-secret-ca.crl",
+							CrlFileName:      "default-ingress-mtls-secret-ca.crl",
 						},
 					},
 				},

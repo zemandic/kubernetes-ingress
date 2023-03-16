@@ -7,4 +7,4 @@ spec:
     clientCertSecret: ingress-mtls-secret
     verifyClient: "on"
     verifyDepth: 1
-    crl: webapp.crl
+    crlFileName: webapp.crl

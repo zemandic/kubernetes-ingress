@@ -328,13 +328,13 @@ metadata:
 spec:
 ingressMTLS:
     clientCertSecret: ingress-mtls-secret
-    crl: webapp.crl
+    crlFileName: webapp.crl
     verifyClient: "on"
     verifyDepth: 1
 ```
 
 **IMPORTANT NOTE**
-When configuring a CRL with the `ingressMTLS.crl` field, there are additional steps to consider and limitations to understand.
+When configuring a CRL with the `ingressMTLS.crlFileName` field, there are additional steps to consider and limitations to understand.
 1. The Ingress Controller will expect the CRL, in this case `webapp.crl`, will be in `/etc/nginx/secrets`. We recommend updating your Ingress Controller deployment to add a Volume to mount your CRL to `/etc/nginx/secrets`
 2. When updating the content of your CRL (e.g a new certificate has been revoked), NGINX will need to be reloaded to pick up the latest changes. We recommend updating the name of your CRL and applying this update to your `ingress-mtls.yaml` policy to ensure NGINX picks up the latest CRL.
 
@@ -370,7 +370,7 @@ spec:
 |``clientCertSecret`` | The name of the Kubernetes secret that stores the CA certificate. It must be in the same namespace as the Policy resource. The secret must be of the type ``nginx.org/ca``, and the certificate must be stored in the secret under the key ``ca.crt``, otherwise the secret will be rejected as invalid. | ``string`` | Yes |
 |``verifyClient`` | Verification for the client. Possible values are ``"on"``, ``"off"``, ``"optional"``, ``"optional_no_ca"``. The default is ``"on"``. | ``string`` | No |
 |``verifyDepth`` | Sets the verification depth in the client certificates chain. The default is ``1``. | ``int`` | No |
-|``crl`` | The name of the Certificate Revocation List. The Ingress Controller will look for this file in `/etc/nginx/secrets` | ``string`` | No |
+|``crlFileName`` | The file name of the Certificate Revocation List. The Ingress Controller will look for this file in `/etc/nginx/secrets` | ``string`` | No |
 {{% /table %}}
 
 #### IngressMTLS Merging Behavior
