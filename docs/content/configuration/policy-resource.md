@@ -272,41 +272,6 @@ type: nginx.org/ca
 data:
   ca.crt: <base64encoded-certificate>
 ```
-#### Using a Certificate Revocation List
-The IngressMTLS policy supports configuring at CRL for your policy.
-This can be done in one of two ways.
-
-> Note: Only one of these configurations options can be used at a time.
-
-1. Adding the `ca.crl` field to the `nginx.org/ca` secret type, which accepts a base64 encoded certificate revocation list (crl).
-Example Yaml:
-```yaml
-kind: Secret
-metadata:
-  name: ingress-mtls-secret
-apiVersion: v1
-type: nginx.org/ca
-data:
-  ca.crt: <base64encoded-certificate>
-  ca.crl: <base64encoded-crl>
-```
-
-2. Adding the `Crl` field to your IngressMTLS policy spec with the name of the CRL.
-Example Yaml:
-```yaml
-apiVersion: k8s.nginx.org/v1
-kind: Policy
-metadata:
-  name: ingress-mtls-policy
-spec:
-ingressMTLS:
-    clientCertSecret: ingress-mtls-secret
-    crl: webapp.crl
-    verifyClient: "on"
-    verifyDepth: 1
-```
-
-> Note: When using this configuration the Ingress Controller will expect the CRL to be located at /etc/nginx/secrets
 
 A VirtualServer that references an IngressMTLS policy must:
 * Enable [TLS termination](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#virtualservertls).
@@ -329,6 +294,75 @@ action:
 We use the `requestHeaders` of the [Action.Proxy](/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/#actionproxy) to set the values of the two headers that NGINX will pass to the upstream servers. See the [list of embedded variables](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#variables) that are supported by the `ngx_http_ssl_module`, which you can use to pass the client certificate details.
 
 > Note: The feature is implemented using the NGINX [ngx_http_ssl_module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html).
+
+#### Using a Certificate Revocation List
+The IngressMTLS policy supports configuring at CRL for your policy.
+This can be done in one of two ways.
+
+> Note: Only one of these configurations options can be used at a time.
+
+1. Adding the `ca.crl` field to the `nginx.org/ca` secret type, which accepts a base64 encoded certificate revocation list (crl).
+   Example Yaml:
+```yaml
+kind: Secret
+metadata:
+  name: ingress-mtls-secret
+apiVersion: v1
+type: nginx.org/ca
+data:
+  ca.crt: <base64encoded-certificate>
+  ca.crl: <base64encoded-crl>
+```
+
+2. Adding the `crl` field to your IngressMTLS policy spec with the name of the CRL.
+
+> Note: This configuration option should only be used when using a CRL that is larger than 1MiB
+> Otherwise we recommend using the `nginx.org/ca` secret type for managing your CRL.
+
+Example Yaml:
+```yaml
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: ingress-mtls-policy
+spec:
+ingressMTLS:
+    clientCertSecret: ingress-mtls-secret
+    crl: webapp.crl
+    verifyClient: "on"
+    verifyDepth: 1
+```
+
+**IMPORTANT NOTE**
+When configuring a CRL with the `ingressMTLS.crl` field, there are additional steps to consider and limitations to understand.
+1. The Ingress Controller will expect the CRL, in this case `webapp.crl`, will be in `/etc/nginx/secrets`. We recommend updating your Ingress Controller deployment to add a Volume to mount your CRL to `/etc/nginx/secrets`
+2. When updating the content of your CRL (e.g a new certificate has been revoked), NGINX will need to be reloaded to pick up the latest changes. We recommend updating the name of your CRL and applying this update to your `ingress-mtls.yaml` policy to ensure NGINX picks up the latest CRL.
+
+Below is an example yaml with the required volume and volume mounts added:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ingress
+  namespace: nginx-ingress
+spec:
+  ...
+  template:
+    ...
+    spec:
+      ...
+      volumes:
+      - name: nginx-crl
+        hostPath:
+          path: /data/crl # Replace this with the path to your CRL
+          type: Directory
+        ...
+      containers:
+        ...
+        volumeMounts:
+        - mountPath: /etc/nginx/secrets
+          name: nginx-crl
+```
 
 {{% table %}}
 |Field | Description | Type | Required |
