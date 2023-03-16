@@ -62,7 +62,7 @@ def teardown_policy(kube_apis, test_namespace, tls_secret, pol_name, mtls_secret
     delete_secret(kube_apis.v1, mtls_secret, test_namespace)
 
 
-@pytest.mark.policy
+@pytest.mark.policies
 @pytest.mark.parametrize(
     "crd_ingress_controller, virtual_server_setup",
     [
