@@ -286,7 +286,7 @@ osm-ca-bundle           nginx.org/ca        1      23m
 
 The CRDs (virtualServer and policy) must now be created.
 Here is the `policy` resource that holds the mTLS information.
-It is required for virtualServer, and the  `policy` must be applied or the  mTLS connection will not work. 
+It is required for virtualServer, and the  `policy` must be applied or the  mTLS connection will not work.
 
 ```yaml
 apiVersion: k8s.nginx.org/v1
