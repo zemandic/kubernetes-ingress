@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: dos-server
-        image:  nginxkic/test-dos-server:2.0.0
+        image: ghcr.io/nginxinc/kic-test-dos-server:edge
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c', 'python3 /root/webserver.py;  tail -f "/dev/null"']
         lifecycle:
